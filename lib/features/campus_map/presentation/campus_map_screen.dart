@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../config/uts_campus_config.dart';
+import '../data/models.dart'; // ADDED: Required for BlockPinModel
 import 'map_controller.dart';
 import 'pin_details_sheet.dart';
 
@@ -72,6 +73,7 @@ class _CampusMapScreenState extends State<CampusMapScreen> {
             initialCameraPosition: const CameraPosition(
               target: UtsCampusConfig.center,
               zoom: 17.0,
+              // Removed bearing: 90.0 to restore default North-Up orientation
             ),
             cameraTargetBounds: CameraTargetBounds(UtsCampusConfig.bounds),
             minMaxZoomPreference: const MinMaxZoomPreference(
@@ -80,6 +82,7 @@ class _CampusMapScreenState extends State<CampusMapScreen> {
             ),
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
+            
             markers: _controller.pins.map((pin) {
               return Marker(
                 markerId: MarkerId(pin.id),
