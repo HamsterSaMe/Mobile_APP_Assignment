@@ -21,12 +21,17 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion // Updated to 21 for google_maps_flutter & geolocator
         targetSdk = flutter.targetSdkVersion
-        // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
-        // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
-        // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`
-        // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Safely extract the API key from local.properties and inject it as a Manifest Placeholders
+        val keystorePropertiesFile = rootProject.file("local.properties")
+        val keystoreProperties = java.util.Properties()
+        if (keystorePropertiesFile.exists()) {
+            keystoreProperties.load(java.io.FileInputStream(keystorePropertiesFile))
+        }
+        val mapsApiKey = keystoreProperties.getProperty("MAPS_API_KEY", "")
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
     }
 
     signingConfigs {
